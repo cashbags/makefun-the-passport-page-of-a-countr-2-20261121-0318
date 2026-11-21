@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Republic of Kaldris — Passport Spread</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #241b14; }
+  .page {
+    width: 1024px; height: 1024px; position: relative; overflow: hidden;
+    background:
+      radial-gradient(ellipse 900px 700px at 50% 42%, #3a2c1f 0%, #2a1f16 55%, #1d150f 100%);
+    font-family: Georgia, 'Times New Roman', serif;
+  }
+  .spread {
+    position: absolute; left: 42px; top: 176px; width: 940px; height: 668px;
+    display: flex; filter: drop-shadow(0 18px 28px rgba(0,0,0,.55));
+  }
+  .leaf {
+    width: 470px; height: 668px; position: relative; overflow: hidden;
+    background-color: #f6f1e2;
+    background-image:
+      radial-gradient(circle at 18% 30%, rgba(120,90,40,.05) 0 90px, transparent 91px),
+      radial-gradient(circle at 82% 72%, rgba(120,90,40,.05) 0 110px, transparent 111px),
+      repeating-linear-gradient(115deg, rgba(90,70,30,.028) 0 2px, transparent 2px 7px);
+  }
+  .leaf.left  { border-right: 1px solid #c9bfa4; border-radius: 3px 0 0 3px; }
+  .leaf.right { border-left: 1px solid #d8cfb4; border-radius: 0 3px 3px 0; }
+  .spine {
+    position: absolute; left: 466px; top: 0; width: 8px; height: 668px;
+    background: linear-gradient(90deg, rgba(0,0,0,.16), rgba(0,0,0,0) 45%, rgba(0,0,0,.16));
+    z-index: 5;
+  }
+  .wm {
+    position: absolute; inset: 0; opacity: .055; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cg fill='none' stroke='%237a5c20' stroke-width='2'%3E%3Cpath d='M75 28 L108 44 V82 Q108 112 75 124 Q42 112 42 82 V44 Z'/%3E%3Cpath d='M75 52 h0 M68 78 h14 M75 62 v22'/%3E%3C/g%3E%3C/svg%3E");
+  }
+  /* ---------- left page: data page ---------- */
+  .crest { text-align: center; padding-top: 26px; }
+  .crest svg { width: 54px; height: 62px; }
+  .country {
+    text-align: center; font-size: 27px; letter-spacing: 5px; color: #2c2417;
+    margin-top: 6px; font-weight: 700;
+  }
+  .doc-kind {
+    text-align: center; font-size: 11px; letter-spacing: 6px; color: #6b5a35;
+    margin-top: 5px; font-family: 'Helvetica Neue', Arial, sans-serif;
+  }
+  .rule-double { border-top: 2px solid #2c2417; border-bottom: 1px solid #2c2417;
+    height: 4px; margin: 14px 30px 0; }
+  .data { display: flex; padding: 20px 30px 0; gap: 22px; }
+  .photo {
+    width: 148px; height: 188px; flex: none; border: 1px solid #8a7a58;
+    outline: 3px solid #f6f1e2; outline-offset: -6px; background: #b9c4a8;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.15);
+  }
+  .photo svg { display: block; width: 100%; height: 100%; }
+  .fields { flex: 1; font-family: 'Helvetica Neue', Arial, sans-serif; }
+  .frow { margin-bottom: 11px; }
+  .frow .lab {
+    font-size: 8.5px; letter-spacing: 2.2px; color: #7a6a45; text-transform: uppercase;
+  }
+  .frow .val { font-size: 15.5px; color: #1d1810; letter-spacing: .4px; margin-top: 1px; }
+  .frow .val.big { font-size: 18px; font-weight: 700; letter-spacing: 1px; }
+  .frow3 { display: flex; gap: 18px; }
+  .frow3 .frow { flex: 1; }
+  .sig { margin-top: 2px; }
+  .sig .scribble {
+    font-family: Georgia, serif; font-style: italic; font-size: 19px; color: #24344d;
+    border-bottom: 1px solid #8a7a58; padding-bottom: 2px; display: inline-block; min-width: 190px;
+  }
+  .mrz {
+    position: absolute; left: 30px; right: 30px; bottom: 26px;
+    font-family: 'DejaVu Sans Mono', 'Liberation Mono', monospace;
+    font-size: 14px; letter-spacing: 0.5px; color: #1d1810; line-height: 1.55;
+    border-top: 1px solid #b3a582; padding-top: 10px; white-space: nowrap;
+  }
+  .pageno { position: absolute; bottom: 8px; right: 14px; font-size: 10px; color: #8a7a58;
+    font-family: 'Helvetica Neue', Arial, sans-serif; }
+  /* ---------- right page: visas / stamps ---------- */
+  .vhead { text-align: center; padding-top: 26px; }
+  .vhead .t { font-size: 15px; letter-spacing: 8px; color: #2c2417; font-weight: 700; }
+  .vhead .s { font-size: 10px; letter-spacing: 4px; color: #6b5a35; margin-top: 4px;
+    font-family: 'Helvetica Neue', Arial, sans-serif; }
+  .vrule { border-top: 1px solid #8a7a58; margin: 14px 30px 0; }
+  .stamps { position: relative; height: 330px; margin: 18px 28px 0; }
+  .stamp {
+    position: absolute; width: 196px; padding: 9px 10px 8px; text-align: center;
+    border: 2.5px solid currentColor; border-radius: 6px;
+    font-family: 'Helvetica Neue', Arial, sans-serif; opacity: .82;
+    box-shadow: inset 0 0 0 1px currentColor;
+  }
+  .stamp .c { font-size: 15px; font-weight: 700; letter-spacing: 2.5px; }
+  .stamp .k { font-size: 10px; letter-spacing: 3px; margin-top: 3px; }
+  .stamp .d { font-size: 15px; font-weight: 700; letter-spacing: 1px; margin-top: 4px; }
+  .stamp .p { font-size: 8.5px; letter-spacing: 1.6px; margin-top: 3px; opacity: .9; }
+  .stamp.blue   { color: #1f4d8f; }
+  .stamp.purple { color: #5b3a7a; }
+  .stamp.red    { color: #8f2f23; }
+  .stamp.green  { color: #2f6b3a; }
+  .s1 { left: 2px;  top: 6px;   transform: rotate(-6deg); }
+  .s2 { right: 2px; top: 10px;  transform: rotate(4deg); }
+  .s3 { left: 2px;  top: 168px; transform: rotate(3deg); }
+  .s4 { right: 2px; top: 164px; transform: rotate(-4deg); }
+  .condition {
+    margin: 6px 30px 0; border: 1px solid #8a7a58; padding: 12px 14px 11px; position: relative;
+    font-family: 'Helvetica Neue', Arial, sans-serif; background: rgba(255,255,255,.28);
+  }
+  .condition .h { font-size: 10px; letter-spacing: 3px; color: #6b5a35; font-weight: 700; padding-right: 96px; }
+  .condition .b { font-size: 12.5px; line-height: 1.5; color: #2c2417; margin-top: 5px; padding-right: 168px; }
+  .condition .b em { font-style: normal; font-weight: 700; }
+  .fee {
+    position: absolute; right: 10px; bottom: -26px; width: 158px; padding: 7px 8px 6px;
+    border: 2.5px solid #2f6b3a; border-radius: 5px; color: #2f6b3a; opacity: .88;
+    transform: rotate(-7deg); text-align: center; background: rgba(246,241,226,.92);
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    box-shadow: inset 0 0 0 1px #2f6b3a;
+  }
+  .fee .a { font-size: 8.5px; letter-spacing: 2px; font-weight: 700; }
+  .fee .b { font-size: 14px; font-weight: 700; letter-spacing: .5px; margin-top: 2px; }
+  .fee .c { font-size: 8.5px; letter-spacing: 1.6px; margin-top: 2px; }
+  .vfoot { position: absolute; bottom: 26px; left: 30px; right: 30px; text-align: center;
+    font-size: 9.5px; letter-spacing: 2.5px; color: #8a7a58;
+    font-family: 'Helvetica Neue', Arial, sans-serif; border-top: 1px solid #b3a582; padding-top: 10px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="spread">
+
+    <!-- ============ LEFT: DATA PAGE ============ -->
+    <div class="leaf left">
+      <div class="wm"></div>
+      <div class="crest">
+        <svg viewBox="0 0 54 62" aria-hidden="true">
+          <path d="M27 2 L50 10 V32 Q50 50 27 60 Q4 50 4 32 V10 Z" fill="none" stroke="#8a6d2f" stroke-width="2.5"/>
+          <path d="M27 8 L45 14 V32 Q45 45 27 54 Q9 45 9 32 V14 Z" fill="none" stroke="#8a6d2f" stroke-width="1"/>
+          <g fill="#8a6d2f">
+            <path d="M24 40 h6 l1 -16 h-8 Z"/>
+            <rect x="22" y="18" width="10" height="4"/>
+            <path d="M27 10 l2.5 3 h-5 Z"/>
+          </g>
+          <g stroke="#8a6d2f" stroke-width="1.2">
+            <line x1="14" y1="22" x2="20" y2="20"/><line x1="40" y1="22" x2="34" y2="20"/>
+          </g>
+          <path d="M10 46 q5 -4 10 0 q5 4 10 0 q5 -4 10 0" fill="none" stroke="#8a6d2f" stroke-width="1.4"/>
+          <path d="M12 51 q5 -3 8 0 q5 3 10 0 q5 -3 8 0" fill="none" stroke="#8a6d2f" stroke-width="1.2"/>
+        </svg>
+      </div>
+      <div class="country">REPUBLIC OF KALDRIS</div>
+      <div class="doc-kind">PASSPORT &nbsp;·&nbsp; PASSEPORT</div>
+      <div class="rule-double"></div>
+
+      <div class="data">
+        <div class="photo">
+          <svg viewBox="0 0 148 188" aria-hidden="true">
+            <defs>
+              <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#c3cdb0"/><stop offset="1" stop-color="#9aa88a"/>
+              </linearGradient>
+            </defs>
+            <rect width="148" height="188" fill="url(#bg)"/>
+            <circle cx="74" cy="26" r="10" fill="#ffffff" opacity=".28"/>
+            <path d="M18 188 Q26 128 74 124 Q122 128 130 188 Z" fill="#1f3a5f"/>
+            <path d="M62 132 L74 152 L86 132 L80 126 L68 126 Z" fill="#f2ede0"/>
+            <path d="M74 152 L66 188 L82 188 Z" fill="#8a2f2f" opacity=".85"/>
+            <rect x="64" y="96" width="20" height="34" rx="7" fill="#d9a986"/>
+            <ellipse cx="74" cy="66" rx="30" ry="37" fill="#d9a986"/>
+            <path d="M44 66 Q42 28 74 26 Q106 28 104 66 Q102 44 96 38 Q100 62 96 70 Q98 44 74 40 Q50 44 52 70 Q48 62 52 38 Q46 44 44 66 Z" fill="#3a2a20"/>
+            <circle cx="74" cy="30" r="9" fill="#3a2a20"/>
+            <path d="M56 62 q7 -4 14 -1 M78 61 q7 -3 14 1" stroke="#3a2a20" stroke-width="2" fill="none" stroke-linecap="round"/>
+            <circle cx="63" cy="68" r="2.6" fill="#241a12"/><circle cx="85" cy="68" r="2.6" fill="#241a12"/>
+            <path d="M72 72 q2 8 -1 11 q3 2 6 0" stroke="#b98a63" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M64 90 q10 5 20 0" stroke="#8a4a34" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <ellipse cx="55" cy="80" rx="6" ry="4" fill="#e0b18c" opacity=".55"/>
+            <ellipse cx="93" cy="80" rx="6" ry="4" fill="#e0b18c" opacity=".55"/>
+          </svg>
+        </div>
+        <div class="fields">
+          <div class="frow3">
+            <div class="frow"><div class="lab">Type / Type</div><div class="val">P</div></div>
+            <div class="frow"><div class="lab">Code / Code</div><div class="val">KLD</div></div>
+            <div class="frow"><div class="lab">Passport No. / Nº</div><div class="val" style="white-space:nowrap">KD8841207</div></div>
+          </div>
+          <div class="frow"><div class="lab">Surname / Nom</div><div class="val big">DRENNAN</div></div>
+          <div class="frow"><div class="lab">Given names / Prénoms</div><div class="val big">ILSA MAREK</div></div>
+          <div class="frow3">
+            <div class="frow"><div class="lab">Nationality / Nationalité</div><div class="val">KALDRIS</div></div>
+            <div class="frow"><div class="lab">Sex / Sexe</div><div class="val">F</div></div>
+          </div>
+          <div class="frow3">
+            <div class="frow"><div class="lab">Date of birth / Né(e) le</div><div class="val">12 JUN 1994</div></div>
+            <div class="frow"><div class="lab">Place of birth / Lieu</div><div class="val">PORT ANSELM</div></div>
+          </div>
+          <div class="frow3">
+            <div class="frow"><div class="lab">Date of issue / Délivré le</div><div class="val">14 MAR 2024</div></div>
+            <div class="frow"><div class="lab">Date of expiry / Expire le</div><div class="val">14 MAR 2034</div></div>
+          </div>
+          <div class="frow"><div class="lab">Authority / Autorité</div><div class="val">PORT ANSELM PASSPORT OFFICE</div></div>
+          <div class="sig"><span class="scribble">Ilsa Drennan</span></div>
+        </div>
+      </div>
+
+      <div class="mrz">P&lt;KLDDRENNAN&lt;&lt;ILSA&lt;MAREK&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;<br>KD88412077KLD9406122F3403141KLD19940612&lt;&lt;&lt;62</div>
+      <div class="pageno">2</div>
+    </div>
+
+    <!-- ============ RIGHT: VISAS / STAMPS ============ -->
+    <div class="leaf right">
+      <div class="wm"></div>
+      <div class="vhead">
+        <div class="t">VISAS</div>
+        <div class="s">ENTRIES · EXITS — KALDRIS AND NEIGHBOURS</div>
+      </div>
+      <div class="vrule"></div>
+
+      <div class="stamps">
+        <div class="stamp blue s1">
+          <div class="c">OSTVARRA</div>
+          <div class="k">— ARRIVAL —</div>
+          <div class="d">02 APR 2024</div>
+          <div class="p">VELK PORT · FERRY TERMINAL</div>
+        </div>
+        <div class="stamp blue s2">
+          <div class="c">OSTVARRA</div>
+          <div class="k">— DEPARTURE —</div>
+          <div class="d">09 APR 2024</div>
+          <div class="p">VELK PORT · FERRY TERMINAL</div>
+        </div>
+        <div class="stamp purple s3">
+          <div class="c">TELMOR</div>
+          <div class="k">— ARRIVAL —</div>
+          <div class="d">18 OCT 2024</div>
+          <div class="p">PORT MERROW · NORTH GATE</div>
+        </div>
+        <div class="stamp red s4">
+          <div class="c">BRINDOR</div>
+          <div class="k">— ARRIVAL · DEPARTURE —</div>
+          <div class="d">11 MAY 2025</div>
+          <div class="p">DEPARTED 02 JUN 2025 · CAIRN CROSSING</div>
+        </div>
+      </div>
+
+      <div class="condition">
+        <div class="fee">
+          <div class="a">EMBARKATION FEE</div>
+          <div class="b">12 KALDRI</div>
+          <div class="c">PAID · 07 NOV 2025</div>
+        </div>
+        <div class="h">VISA CONDITION 7 — KALDRIS HARBOURMASTER</div>
+        <div class="b">The holder may not work in the <em>Salt Harbour</em> without a
+        <em>tide permit</em>. Permits are issued by the Harbourmaster, Port Anselm,
+        and are valid for one tide only.</div>
+      </div>
+
+      <div class="vfoot">THIS PASSPORT IS THE PROPERTY OF THE REPUBLIC OF KALDRIS</div>
+      <div class="pageno">3</div>
+    </div>
+    <div class="spine"></div>
+  </div>
+</div>
+</body>
+</html>
